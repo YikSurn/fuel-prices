@@ -38,7 +38,9 @@ angular
       templateUrl: 'views/about.html',
       controller: 'AboutCtrl'
     });
-    
+   
+    // $httpProvider.defaults.useXDomain = true;
+    // delete $httpProvider.defaults.headers.common['X-Requested-With'];
   }
 ])
 .run(['$http', '$state', '$cookies', '$rootScope',
