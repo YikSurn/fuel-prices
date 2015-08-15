@@ -19,6 +19,6 @@ class StationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
 
-class FuelViewSert(viewsets.ReadOnlyModelViewSet):
+class FuelViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Fuel.objects.all()
     serializer_class = FuelSerializer

@@ -1,0 +1,3 @@
+env
+fuel/__pycache__/*
+api/__pycache__/*
