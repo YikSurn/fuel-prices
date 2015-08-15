@@ -31,7 +31,7 @@ angular.module('fuelPricesApp')
         center: {lat: -37.814107, lng: 144.96328},
         zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
+      };
       gMap = new google.maps.Map(mapCanvas, mapOptions);
       infowindow = new google.maps.InfoWindow();
 
@@ -39,21 +39,21 @@ angular.module('fuelPricesApp')
         infowindow.close();
         initialInfoWindow.close();
       });
-    };
+    }
 
 
     // No Geolocation handling
     function handleNoGeolocation(errorFlag) {
-      if (errorFlag == true) {
-        alert("Couldn't Find Your Location!");
+      if (errorFlag === true) {
+        alert('Couldn\'t Find Your Location!');
       }
       else {
-        alert("Your browser doesn't support Geolocation. We've placed you at Inspire 9");
+        alert('Your browser doesn\'t support Geolocation. We\'ve placed you at Inspire 9');
       }
       initialPos = new google.maps.LatLng(-37.82396, 144.99097);
       initialMarker.setPosition(initialPos);
       gMap.setCenter(initialPos);
-    };
+    }
 
     // images for the different brands of fuel stations
     var images = {
@@ -66,6 +66,32 @@ angular.module('fuelPricesApp')
       'Caltex' : 'images/caltex.ico',
       'Ampol' : 'images/no-logo-petrol.ico',
       'Liberty' : 'images/logo-liberty.ico'
+    };
+
+    // Cost savings calculator
+    $scope.calculatorInput = {
+      size: undefined,
+      type: undefined,
+      freq: undefined,
+      savings: undefined
+    };
+
+    $scope.calculator = {
+      // Number of litres the size of car could have
+      sizes: [
+        {label: 'Small', value: 42 },
+        {label: 'Medium', value: 70 },
+        {label: 'Large', value: 85 }
+      ],
+      // potential cost savings of a fuel type
+      types: []
+    };
+
+    $scope.calcSavings = function() {
+      var monthsInYear = 12;
+      var convertToDollar = 0.01;
+      $scope.calculatorInput.savings = ($scope.calculatorInput.size * $scope.calculatorInput.type *
+        $scope.calculatorInput.freq * monthsInYear * convertToDollar).toFixed(2);
     };
 
     $http.get(API_MOUNT + 'station')
@@ -87,7 +113,7 @@ angular.module('fuelPricesApp')
             var pos = {
               lat: position.coords.latitude,
               lng: position.coords.longitude
-            }
+            };
             initialInfoWindow.setPosition(pos);
             initialInfoWindow.setContent('You are here!');
             gMap.setCenter(pos);
@@ -110,36 +136,70 @@ angular.module('fuelPricesApp')
         });
 
         for (var i = 0; i < $scope.stations.length; i++) {
-          var temp_station = angular.copy($scope.stations[i]);
+          var tempStation = angular.copy($scope.stations[i]);
 
           // Change fuels_offer from array to dictionary
-          var temp_fuel_price = {};
-          for (var j = 0; j < temp_station.fuels_offer.length; j++) {
-            var temp = angular.copy(temp_station.fuels_offer[j]);
-            temp_fuel_price[temp_station.fuels_offer[j].name] = temp_station.fuels_offer[j].price;
-          };
-          $scope.stations[i].fuels_offer = angular.copy(temp_fuel_price);
+          var tempFuelPrice = {};
+          for (var j = 0; j < tempStation.fuels_offer.length; j++) {
+            var temp = angular.copy(tempStation.fuels_offer[j]);
+            tempFuelPrice[temp.name] = temp.price;
+          }
+          $scope.stations[i].fuels_offer = angular.copy(tempFuelPrice);
 
-          $scope.stations[i]['marker'] = new google.maps.Marker({
-            position: {lat: temp_station['latitude'], lng: temp_station['longitude']},
+          $scope.stations[i].marker = new google.maps.Marker({
+            position: {lat: tempStation.latitude, lng: tempStation.longitude},
             map: gMap,
-            icon: images[temp_station.brand],
+            icon: images[tempStation.brand],
             animation: google.maps.Animation.DROP,
-            title: temp_station['name']
+            title: tempStation.name
           });
-          attachDetailsAndWindow($scope.stations[i]['marker'], $scope.stations[i]);
-        };
-      });
+          attachDetailsAndWindow($scope.stations[i].marker, $scope.stations[i]);
+        }
 
-    // google.maps.event.addDomListener(window, 'load', initMap);
-    // marker.setMap(map);
+        // Calculate potential savings for each fuel type
+        function fuelSavings() {
+          var minMaxDict = {
+            'Diesel' : undefined, 
+            'Unleaded' : undefined,
+            'Premium Unleaded 95' : undefined,
+            'Premium Unleaded 98' : undefined
+          };
+
+          for (var i = 0; i < $scope.stations.length; i++) {
+            var temp = angular.copy($scope.stations[i].fuels_offer);
+            for (var fueltype in temp) {
+              if (minMaxDict[fueltype] === undefined) {
+                minMaxDict[fueltype] = {};
+                minMaxDict[fueltype].min = temp[fueltype];
+                minMaxDict[fueltype].max = temp[fueltype];
+                continue;
+              } 
+              
+              if (temp[fueltype] < minMaxDict[fueltype].min) {
+                minMaxDict[fueltype].min = temp[fueltype];
+              }
+
+              if (temp[fueltype] > minMaxDict[fueltype].max) {
+                minMaxDict[fueltype].max = temp[fueltype];
+              }
+
+            }
+          }
+
+          for (var fueltypeDict in minMaxDict) {
+            $scope.calculator.types.push({label: fueltypeDict, value: minMaxDict[fueltypeDict].max - minMaxDict[fueltypeDict].min });
+          }
+        }
+
+        fuelSavings();
+      });
 
     function attachDetailsAndWindow(marker, station) {
       var fuelString = '';
 
       for (var type in station.fuels_offer) {
         fuelString += type + ': ' + station.fuels_offer[type] + 'c<br>';
-      };
+      }
 
       google.maps.event.addListener(marker, 'click', function(e) {
         infowindow.setContent('Station Name: ' + station.name + '<br>' +
@@ -148,7 +208,7 @@ angular.module('fuelPricesApp')
             fuelString);
         infowindow.open(gMap, this);
       });
-    };
+    }
 
     // Default Travel Distance Slider 
     $scope.distanceSlider = 5;
@@ -165,60 +225,32 @@ angular.module('fuelPricesApp')
 
         if ($scope.stations[i].fuels_offer[fuelType] < minStations[0].fuels_offer[fuelType]) {
           minStations = [$scope.stations[i]];
-        } else if ($scope.stations[i].fuels_offer[fuelType] == minStations[0].fuels_offer[fuelType]) {
+        } else if ($scope.stations[i].fuels_offer[fuelType] === minStations[0].fuels_offer[fuelType]) {
           minStations.push($scope.stations[i]);
         }
-      };
+      }
 
-      if (minStations.length == 1) {
+      if (minStations.length === 1) {
         google.maps.event.trigger(minStations[0].marker, 'click');
       }
-      for (var i = 0; i < minStations.length; i++) {
-        minStations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
-      };
+      for (var j = 0; j < minStations.length; j++) {
+        minStations[j].marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
     };
 
-    // Cost savings calculator
-    $scope.calculatorInput = {
-      size: undefined,
-      type: undefined,
-      freq: undefined,
-      savings: undefined
-    };
-
-    $scope.calculator = {
-      sizes: [
-        { id: 0, label: 'Small', value: 42 },
-        { id: 1, label: 'Medium', value: 70 },
-        { id: 2, label: 'Large', value: 85 }
-      ],
-      types: [
-        { id: 0, label: 'Diesel', value: 5.7 },
-        { id: 1, label: 'Unleaded', value: 7.4 },
-        { id: 2, label: 'Premium Unleaded 95', value: 4.2 },
-        { id: 3, label: 'Premium Unleaded 98', value: 7 }
-      ]
-    };
-
-    $scope.calcSavings = function() {
-      var monthsInYear = 12;
-      var convertToDollar = 0.01;
-      $scope.calculatorInput.savings = ($scope.calculatorInput.size * $scope.calculatorInput.type *
-        $scope.calculatorInput.freq * monthsInYear * convertToDollar).toFixed(2);
-    };
 
     // Find cheapest fuel station within given distance
-    $scope.findCheapestWithinDistance = function(max_distance) {
+    $scope.findCheapestWithinDistance = function(maxDistance) {
       var fuelType = angular.copy($scope.selected.fuel);
       var minStations = undefined;
       var firstInDist = false;
 
       for (var i = 0; i < $scope.stations.length; i++) {
-        var station_pos = new google.maps.LatLng($scope.stations[i].latitude, $scope.stations[i].longitude);
+        var stationPos = new google.maps.LatLng($scope.stations[i].latitude, $scope.stations[i].longitude);
         // Compute distance from curr location to station
-        $scope.stations[i].distance = google.maps.geometry.spherical.computeDistanceBetween($scope.currPos,station_pos);
-        // if distance exceeds max_distance, skip to next station
-        if (($scope.stations[i].distance)/1000 > max_distance) {
+        $scope.stations[i].distance = google.maps.geometry.spherical.computeDistanceBetween($scope.currPos,stationPos);
+        // if distance exceeds maxDistance, skip to next station
+        if (($scope.stations[i].distance)/1000 > maxDistance) {
           $scope.stations[i].marker.setMap(null);
         }
         else {
@@ -233,24 +265,24 @@ angular.module('fuelPricesApp')
           else if ($scope.stations[i].fuels_offer[fuelType] < minStations[0].fuels_offer[fuelType]) {
             minStations = [$scope.stations[i]];
           } 
-          else if ($scope.stations[i].fuels_offer[fuelType] == minStations[0].fuels_offer[fuelType]) {
+          else if ($scope.stations[i].fuels_offer[fuelType] === minStations[0].fuels_offer[fuelType]) {
             minStations.push($scope.stations[i]);
           }
         }
-      };
+      }
 
       // show the cheapest station on map
-      if (minStations == undefined) {
+      if (minStations === undefined) {
         // No stations in range
         alert('No stations within specified distance!');
       }
       else {
-        if (minStations.length == 1) {
+        if (minStations.length === 1) {
           google.maps.event.trigger(minStations[0].marker, 'click');
-        };
-        for (var i = 0; i < minStations.length; i++) {
-          minStations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
-        };
+        }
+        for (var j = 0; j < minStations.length; j++) {
+          minStations[j].marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
       }
     };
 

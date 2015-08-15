@@ -19,8 +19,8 @@ angular
   'ui.router',
   'rzModule',
 ])
-.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider',
-  function ($locationProvider, $stateProvider, $urlRouterProvider, $httpProvider) {
+.config(['$locationProvider', '$stateProvider', '$urlRouterProvider',
+  function ($locationProvider, $stateProvider, $urlRouterProvider) {
 
     // For unmatched routes
     $urlRouterProvider.otherwise('/');
