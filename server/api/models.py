@@ -4,7 +4,7 @@ from django.db import models
 class Station(models.Model):
     """Petrol station details"""
     name = models.CharField(max_length=50)
-    address = models.CharField(max_length=100, unique=True)
+    street = models.CharField(max_length=100, unique=True)
     suburbs = models.CharField(max_length=50)
     postcode = models.CharField(max_length=4)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
