@@ -56,15 +56,15 @@ angular.module('fuelPricesApp')
 
     // images for the different brands of fuel stations
     var images = {
-      'BP' : '',
-      'National Lube' : '',
-      'United' : '',
-      '7 Eleven' : '',
-      'Shell' : '',
-      'Fuel Point' : '',
-      'Caltex' : '',
-      'Ampol' : '',
-      'Liberty' : ''
+      // 'BP' : 'images/BP.ico',
+      // 'National Lube' : 'images/national_lube.ico',
+      // 'United' : 'images/united-logo.ico',
+      // '7 Eleven' : 'images/711.ico',
+      // 'Shell' : 'images/Shell_logo.ico',
+      // // 'Fuel Point' : 'images/',
+      // 'Caltex' : 'images/caltex.ico',
+      // // 'Ampol' : 'images/',
+      // 'Liberty' : 'images/logo-liberty.ico'
     };
 
     $http.get(API_MOUNT + 'station')
@@ -170,12 +170,40 @@ angular.module('fuelPricesApp')
         }
       };
 
-      console.log(min_stations);
       if (min_stations.length == 1) {
         google.maps.event.trigger(min_stations[0].marker, 'click');
       }
       for (var i = 0; i < min_stations.length; i++) {
         min_stations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
       };
+    };
+
+    // Cost savings calculator
+    $scope.calculatorInput = {
+      size: undefined,
+      type: undefined,
+      freq: undefined,
+      savings: undefined
+    };
+
+    $scope.calculator = {
+      sizes: [
+        { id: 0, label: 'Small', value: 42 },
+        { id: 1, label: 'Medium', value: 70 },
+        { id: 2, label: 'Large', value: 85 }
+      ],
+      types: [
+        { id: 0, label: 'Diesel', value: 5.7 },
+        { id: 1, label: 'Unleaded', value: 7.4 },
+        { id: 2, label: 'Premium Unleaded 95', value: 4.2 },
+        { id: 3, label: 'Premium Unleaded 98', value: 7 }
+      ]
+    };
+
+    $scope.calcSavings = function() {
+      var monthsInYear = 12;
+      var convertToDollar = 0.01;
+      $scope.calculatorInput.savings = ($scope.calculatorInput.size * $scope.calculatorInput.type *
+        $scope.calculatorInput.freq * monthsInYear * convertToDollar).toFixed(2);
     };
   });
