@@ -9,16 +9,15 @@
     </div>
     
     <div ng-hide="stations" align="center">
-      LOADING!!
+      STATION LOCATIONS ARE LOADING!!
     </div>
   </div>
-  <div class="col-md-4">
-    <select ng-model="selected.fuel">
-        <option select="selected">What's your fucking fuel?</option>
-        <option value="">Diesel</option>
-        <option value="">Unleaded</option>
-        <option value="">Premium 95</option>
-        <option value="">Premium 98</option>
+
+  <!-- Filter options -->
+  <div class="col-md-4" align="center">
+    <p>What is your fuel type?</p>
+    <select ng-model="selected.fuel" ng-init="selected.fuel = types[0]">
+      <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
     </select>
 
     <br>
@@ -29,13 +28,7 @@
                 rz-slider-always-show-bar="true"
                 rz-slider-tpl-url="rzSliderTpl.html"></rzslider>
 
+    <button ng-click="updateMarkers()">Update</button>
   </div>
-
-  <div ng-hide="stations">
-    MAP IS LOADING!!
-  </div>
-
 
 </div>
-
-
