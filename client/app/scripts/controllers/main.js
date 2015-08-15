@@ -27,8 +27,7 @@ angular.module('fuelPricesApp')
 
     var initialLocation;
     var browserSupportFlag = new Boolean();
-    var infoWindow = new google.maps.InfoWindow({map: gMap})
-    // Try W3C Geolocation
+    var infoWindow = new google.maps.InfoWindow({gmap: gMap})
 
     // No Geolocation handling
     function handleNoGeolocation(errorFlag) {
@@ -59,8 +58,7 @@ angular.module('fuelPricesApp')
             infoWindow.setPosition(pos);
             infoWindow.setContent('You are here!');
             gMap.setCenter(pos);
-            // initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-            // map.setCenter(initialLocation);
+
           }, function() {
             handleNoGeolocation(browserSupportFlag);
           });
@@ -105,7 +103,7 @@ angular.module('fuelPricesApp')
     };
 
     // Travel Distance Sliders
-    $scope.distanceSlider = 1000;
+    $scope.distanceSlider = 5;
 
 
   });
