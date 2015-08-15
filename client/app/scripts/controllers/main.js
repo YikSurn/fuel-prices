@@ -25,23 +25,25 @@ angular.module('fuelPricesApp')
       gMap = new google.maps.Map(mapCanvas, mapOptions);
     };
 
-    var initialLocation;
+    var initialMarker, initialPos;
     var browserSupportFlag = new Boolean();
-    var infoWindow = new google.maps.InfoWindow({map: gMap})
+    var initialInfoWindow = new google.maps.InfoWindow({
+      content: 'You Are Here!'
+    });
     // Try W3C Geolocation
 
     // No Geolocation handling
     function handleNoGeolocation(errorFlag) {
       if (errorFlag == true) {
         alert("Couldn't Find Your Location!");
-        initialLocation = new google.maps.LatLng(-37.82396, 144.99097)
       }
       else {
         alert("Your browser doesn't support Geolocation. We've placed you at Inspire 9");
-        initialLocation = new google.maps.LatLng(-37.82396, 144.99097)
       }
-      map.setCenter(initialLocation);
-    }
+      initialPos = new google.maps.LatLng(-37.82396, 144.99097);
+      initialMarker.setPosition(initialPos);
+      gMap.setCenter(initialPos);
+    };
 
     $http.get(API_MOUNT + 'station')
       .success(function(data) {
@@ -49,18 +51,19 @@ angular.module('fuelPricesApp')
 
         initMap();
 
+        initialMarker = new google.maps.Marker({
+          map: gMap,
+          animation: google.maps.Animation.BOUNCE,
+          title: "YOU ARE HERE!"
+        });
+
         if(navigator.geolocation) {
           browserSupportFlag = true;
           navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            }
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('You are here!');
-            gMap.setCenter(pos);
-            // initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-            // map.setCenter(initialLocation);
+            initialPos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+            initialMarker.setPosition(initialPos);
+            gMap.setCenter(initialPos);
           }, function() {
             handleNoGeolocation(browserSupportFlag);
           });
@@ -71,6 +74,10 @@ angular.module('fuelPricesApp')
           handleNoGeolocation(browserSupportFlag);
         }
         
+        initialMarker.addListener('click', function() {
+          initialInfoWindow.open(initialMarker.get('map'), initialMarker);
+        });
+
         for (var i = 0; i < $scope.stations.length; i++) {
           var temp_station = angular.copy($scope.stations[i]);
 
