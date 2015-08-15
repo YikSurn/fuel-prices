@@ -1,5 +1,5 @@
 @echo off
-set "VIRTUAL_ENV=C:\Users\Yik Surn\Desktop\test-unihack\server\env"
+set "VIRTUAL_ENV=C:\Users\Yik Surn\Desktop\fuel-prices-repo\server\env"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"
