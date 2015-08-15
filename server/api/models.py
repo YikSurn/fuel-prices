@@ -10,6 +10,7 @@ class Station(models.Model):
     address = models.CharField(max_length=200, unique=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
+    brand = models.CharField(max_length=50)
 
     class Meta:
         db_table = 'station'
