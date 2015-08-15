@@ -1,5 +1,20 @@
-<div class="container">
-  <h1 style="color:black;"><center><b>PUMP IT UP!</b></center></h1>
+<div id="preface" class="preface" style="width: 100%; height: 100%; min-height: 100%; position: relative;">
+  <div class="preface-image">
+    <img src="images/background.jpg" style="position:relative; margin:0px; padding: 0px; border: none; width:100%; height: 100%; max-height: none; max-width: none; z-index: -999999; left:0px;">
+  </div>
+  <div style="position: absolute; top: 12%; width: 100%; z-index: 2;">
+    <div class="col-md-12">
+        <center>
+        <h1 style="color:white; font-size:6rem;">Save $ Everytime You Come With Us!</h1><br>
+        <h4 style="color:white; font-size:3rem;">We provide the best data on fuel prices around you</h4>
+        </center>
+    </div>
+  </div>
+
+<br><br>
+
+<div style="padding-right: 20px; padding-left: 20px;">
+<h1 style="color:black;font-size: 5rem;"><center><b>PUMP IT UP!</b></center></h1>
   <div class="row">
     <div class="col-md-8">
       <div ng-show="stations" class="map">
@@ -9,58 +24,83 @@
         </div>
       </div>
       
-      <div ng-hide="stations" align="center">
-        STATION LOCATIONS ARE LOADING!!
-      </div>
+      
+      <center><div ng-hide="stations">
+        Searching for stations around you...
+        <i class="fa fa-refresh fa-spin"></i>
+      </div></center>
     </div>
 
     <!-- Filter options -->
     <div class="col-md-4">
-      <p>What is your fuel type?</p>
-      <select ng-model="selected.fuel" ng-init="selected.fuel = types[0]">
-        <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
-      </select>
-
       <br><br>
-      I'm willing to travel a maximum of {{ distanceSlider | json }} km
-      <br><br>
-
-      <div>
-        <rzslider rz-slider-model="distanceSlider"
-                  rz-slider-floor="1"
-                  rz-slider-ceil="10"
-                  rz-slider-step="1"
-                  rz-slider-always-show-bar="true"></rzslider>
+      <div class="panel panel-default">
+          <div class="panel-body">
+            <p>What is your fuel type?</p>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <select class="selectpicker" ng-model="selected.fuel" ng-init="selected.fuel = types[0]">
+                <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
+              </select>
+            </button>
+          </div>
+          </div>
+          <div class="panel-body">
+              I'm willing to travel a maximum of {{ distanceSlider | json }} km
+              <br><br>
+              <div>
+                <rzslider rz-slider-model="distanceSlider"
+                          rz-slider-floor="1"
+                          rz-slider-ceil="10"
+                          rz-slider-step="1"
+                          rz-slider-always-show-bar="true"></rzslider>
+              </div>
+          </div>
       </div>
-      <button ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">Update</button>
+      <center>
+          <button type="button" class="btn btn-warning" ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">
+            Show me the cheapest station!
+          </button>
+      </center>
     </div>
   </div>
 
-  <!-- Cost savings calculator -->
-  <div class="savingsCalculator" align="center">
-    <h2>Find out how much extra income you could have!</h2>
+<!-- Cost savings calculator -->
+<div class="savingsCalculator" align="center">
+<h2 style="color:black;">How much can you save with us!?</h2>
+
+<div class="col-md-4">
+<div class="thumbnail" style="height:100px;">
     <h4>What is your car size?</h4>
-    <select ng-model="calculatorInput.size" ng-init="calculatorInput.size = calculator.sizes[1].value" ng-options="item.value as item.label for item in calculator.sizes">
+    <select ng-model="calculatorInput.size" ng-init="calculatorInput.size = calculator.sizes[1].value" ng-options="item.value as item.label for item in calculator.sizes" style="width:80%">
     </select>
     <br><br>
+</div>
+</div>
 
+<div class="col-md-4">
+<div class="thumbnail" style="height:100px;">
     <h4>What is your fuel type?</h4>
-    <select ng-model="calculatorInput.type" ng-init="calculatorInput.type = calculator.types[0].value" ng-options="item.value as item.label for item in calculator.types">
+    <select ng-model="calculatorInput.type" ng-init="calculatorInput.type = calculator.types[0].value" ng-options="item.value as item.label for item in calculator.types" style="width:80%">
     </select>
     <br><br>
+</div>
+</div>
 
+<div class="col-md-4">
+<div class="thumbnail" style="height:100px;">
     <h4>How often do you go to the petrol station every month?</h4>
-    <input type="number" ng-model="calculatorInput.freq" min="0" max="60" required="true">
+    <input type="number" ng-model="calculatorInput.freq" min="0" max="60" required="true" style="width:80%">
     <br><br>
+</div>
+</div>
 
-    <button ng-click="calcSavings()">Show Me!</button>
-    <br><br>
+<button type="button" class="btn btn-warning" ng-click="calcSavings()">Show Me!</button>
+<br><br>
 
 <!--     <button ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">Update</button> -->
 
-    <h3 ng-show="calculatorInput.savings"><b>You could potentially save ${{calculatorInput.savings}} every year!</b></h3>
-    <br><br>
-
-  </div>
-
+<h3 ng-show="calculatorInput.savings"><b>You could potentially save ${{calculatorInput.savings}} every year!</b></h3>
+<br><br>
 </div>
+
