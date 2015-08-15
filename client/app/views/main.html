@@ -15,20 +15,23 @@
     </div>
 
     <!-- Filter options -->
-    <div class="col-md-4" align="center">
+    <div class="col-md-4">
       <p>What is your fuel type?</p>
       <select ng-model="selected.fuel" ng-init="selected.fuel = types[0]">
         <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
       </select>
 
-      <br>
+      <br><br>
       I'm willing to travel a maximum of {{ distanceSlider | json }} km
-      <rzslider rz-slider-model="distanceSlider"
-                  rz-slider-floor="0.5"
-                  rz-slider-ceil="10"
-                  rz-slider-always-show-bar="true"
-                  rz-slider-tpl-url="rzSliderTpl.html"></rzslider>
+      <br><br>
 
+      <div>
+        <rzslider rz-slider-model="distanceSlider"
+                  rz-slider-floor="1"
+                  rz-slider-ceil="10"
+                  rz-slider-step="1"
+                  rz-slider-always-show-bar="true"></rzslider>
+      </div>
       <button ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">Update</button>
     </div>
   </div>
