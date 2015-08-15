@@ -1,8 +1,15 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 from django.http import HttpRequest
 from . import views
+from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import DefaultRouter
+
+# Create a router and register viewsets
+router = DefaultRouter()
+router.register(r'station', views.StationViewSet)
 
 urlpatterns = patterns('',
+    url(r'^', include(router.urls)),
     # Examples:
     # url(r'^$', 'scholardeck.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
@@ -16,4 +23,5 @@ urlpatterns = patterns('',
     # url(r'^scholarship_urls/$', views.scholarship_urls, name='scholarship_urls'),
 
     # url(r'^s3_credentials/$', views.s3_credentials, name='s3_credentials'),
+
 )
