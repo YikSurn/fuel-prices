@@ -17,6 +17,7 @@ angular.module('fuelPricesApp')
 
     // Integrating Google Map API 
     $scope.stations = undefined;
+    $scope.currPos = new google.maps.LatLng(-37.82396, 144.99097);
     var gMap, infowindow;
     var initialMarker, initialPos;
     var browserSupportFlag = new Boolean();
@@ -207,46 +208,34 @@ angular.module('fuelPricesApp')
     };
 
     // Find cheapest fuel station within given distance
-    function findCheapestWithinDistance(pt, max_distance) {
-      var cheapest = {distance: null, price: null, longitude: null, latitude: null};
-      for (var i = 0; i < $scope.stations.length; i++) {
-        var tempStation = angular.copy($scope.stations[i]);
-        var station_pos = new google.maps.LatLng(tempStation.latitude, tempStation.longitude);
-        // Compute distance from pt to station
-        $scope.stations[i].distance = google.maps.geometry.spherical.computeDistanceBetween(pt,station_pos);
+    $scope.findCheapestWithinDistance = function(max_distance) {
+      console.log(max_distance);
+      var fuel_type = angular.copy($scope.selected.fuel);
+      var min_stations = [$scope.stations[0]];
+      // var cheapest = {distance: null, price: null, longitude: null, latitude: null};
+      for (var i = 1; i < $scope.stations.length; i++) {
+        var station_pos = new google.maps.LatLng($scope.stations[i].latitude, $scope.stations[i].longitude);
+        // Compute distance from curr location to station
+        $scope.stations[i].distance = google.maps.geometry.spherical.computeDistanceBetween($scope.currPos,station_pos);
         // if distance exceeds max_distance, skip to next station
-        if ($scope.stations[i].distance > max_distance) {
+        if ($scope.stations[i].distance/1000 > max_distance) {
           continue;
         }
-        // Keep track of cheapest price 
-        if (i == 0) {
-          cheapest.distance = $scope.station[i].distance;
-          // cheapest['price'] = ;
-          cheapest.latitude = tempStation.latitude;
-          cheapest.longitude = tempStation.longitude;
-        } 
-        // else {
-        //   // if curr station price is cheaper, update cheapest
-        //   if ($scope.station[i][] < cheapest.price) {
-        //     cheapest.distance = $scope.station[i].distance;
-        //     cheapest['price'] = ;
-        //     cheapest.latitude = tempStation['latitude'];
-        //     cheapest.longitude  = tempStation['longitude'];
-        //   }
-        // }
-      }
-      console.log(cheapest);
-      // plot the cheapest station on map
-      cheapestMarker = new google.maps.Marker({
-        position: {lat: cheapest.latitude, lng: cheapest.longitude},
-        map: gMap,
-        icon: '',
-        animation: google.maps.Animation.BOUNCE,
-        title: 'Pump here!'
-      });
-      cheapestMarker.addListener('click', function() {
-        infowindow.open(cheapestMarker.get('map'), cheapestMarker);
-      });
+        // Keep track of cheapest price
+        if ($scope.stations[i].fuels_offer[fuel_type] < min_stations[0].fuels_offer[fuel_type]) {
+          min_stations = [$scope.stations[i]];
+        } else if ($scope.stations[i].fuels_offer[fuel_type] == min_stations[0].fuels_offer[fuel_type]) {
+          min_stations.push($scope.stations[i]);
+        }
+      };
+      console.log(min_stations);
+      // show the cheapest station on map
+      if (min_stations.length == 1) {
+        google.maps.event.trigger(min_stations[0].marker, 'click');
+      };
+      for (var i = 0; i < min_stations.length; i++) {
+        min_stations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+      };
     };
 
   });
