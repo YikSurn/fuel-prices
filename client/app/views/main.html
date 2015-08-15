@@ -1,9 +1,26 @@
 <div class="container">
-  <h1><center>WHERE TO PUMP FUEL!?</center></h1>
-  <div class="map">
+  <h1 style="color:black;"><center><b>PUMP IT UP!</b></center></h1>
+  <div class="col-md-10">
+    <div class="map">
       <div id="googlemap" class="map__canvas" style="position: relative; overflow: hidden; transform: translateZ(0px); background-color: rgb(229, 227, 223);">
           <div style="position: absolute; left: 0px; top: 0px; overflow: hidden; width: 100%; height: 100%; z-index: 0; cursor: url(https://maps.gstatic.com/mapfiles/openhand_8_8.cur) 8 8, default;">
           </div>
       </div>
+    </div>
   </div>
+  <div class="col-md-2">
+    <select>
+        <option select="selected">What's your fucking fuel?</option>
+        <option value="">Diesel</option>
+        <option value="">Unleaded</option>
+        <option value="">Premium 95</option>
+        <option value="">Premium 98</option>
+    </select>
+
+    <rzslider rz-slider-model="distanceSlider"
+                rz-slider-floor="50"
+                rz-slider-ceil="450"
+                rz-slider-always-show-bar="true"
+                rz-slider-tpl-url="rzSliderTpl.html"></rzslider>
+
 </div>

@@ -10,6 +10,7 @@
 angular.module('fuelPricesApp')
   .controller('MainCtrl', function ($scope, $http) {
 
+    // Integrating Google Map API 
     $scope.stations;
 
     var infowindow;
@@ -98,5 +99,9 @@ angular.module('fuelPricesApp')
         infowindow.open(marker.get('map'), marker);
       });
     };
+
+    // Travel Distance Sliders
+    $scope.distanceSlider = 1000;
+
 
   });

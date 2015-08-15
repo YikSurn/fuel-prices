@@ -1,7 +1,6 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,900,700italic,300,500);
 // endbower
 
 .browsehappy {
@@ -45,15 +44,14 @@ body {
         right: 0;
         color: #000000; } }
   .map .map__canvas {
-    height: 20rem;
+    height: 25rem;
     position: relative;
     width: 100%;
     background: #ffffff !important;
     margin: 1rem auto 0 auto; }
     @media only screen and (min-width: 30em) {
       .map .map__canvas {
-        height: 30rem;
-        margin: 4rem auto 2rem auto; } }
+        height: 30rem; } }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,

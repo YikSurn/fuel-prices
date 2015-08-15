@@ -17,6 +17,7 @@ angular
   'ngSanitize',
   'ngTouch',
   'ui.router',
+  'rzModule',
 ])
 .config(['$locationProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider',
   function ($locationProvider, $stateProvider, $urlRouterProvider, $httpProvider) {
