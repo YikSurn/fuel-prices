@@ -10,6 +10,11 @@
 angular.module('fuelPricesApp')
   .controller('MainCtrl', function ($scope, $http) {
 
+    $scope.selected = {
+      fuel : undefined
+    };
+    $scope.types = ['All Types', 'Diesel', 'Unleaded', 'Premium 95', 'Premium 98'];
+
     // Integrating Google Map API 
     $scope.stations = undefined;
     var gMap;
@@ -62,6 +67,8 @@ angular.module('fuelPricesApp')
       .success(function(data) {
         $scope.stations = data;
 
+
+
         initMap();
 
         initialMarker = new google.maps.Marker({
@@ -102,6 +109,14 @@ angular.module('fuelPricesApp')
         for (var i = 0; i < $scope.stations.length; i++) {
           var temp_station = angular.copy($scope.stations[i]);
 
+          // Change fuels_offer from array to dictionary
+          var temp_fuel_price = {};
+          for (var j = 0; j < temp_station.fuels_offer.length; j++) {
+            var temp = angular.copy(temp_station.fuels_offer[j]);
+            temp_fuel_price[temp_station.fuels_offer[j].name] = temp_station.fuels_offer[j].price;
+          };
+          $scope.stations[i].fuels_offer = angular.copy(temp_fuel_price);
+
           $scope.stations[i]['marker'] = new google.maps.Marker({
             position: {lat: temp_station['latitude'], lng: temp_station['longitude']},
             map: gMap,
@@ -120,8 +135,8 @@ angular.module('fuelPricesApp')
     function attachDetailsAndWindow(marker, station) {
       var fuelString = '';
 
-      for (var i = 0; i < station.fuels_offer.length; i++) {
-        fuelString += station.fuels_offer[i]['name'] + ': ' + station.fuels_offer[i]['price'] + 'c<br>';
+      for (var type in station.fuels_offer) {
+        fuelString += type + ': ' + station.fuels_offer[type] + 'c<br>';
       };
 
       var infowindow = new google.maps.InfoWindow({
@@ -139,5 +154,11 @@ angular.module('fuelPricesApp')
     // Travel Distance Sliders
     $scope.distanceSlider = 5;
 
-
+    $scope.updateMarkers = function () {
+      var fuel_type = angular.copy($scope.selected.fuel);
+      var min_station = $scope.stations[0];
+      for (var i = 1; i < $scope.stations.length; i++) {
+        // $scope.stations[i]
+      };
+    };
   });
