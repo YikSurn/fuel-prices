@@ -29,7 +29,7 @@ angular.module('fuelPricesApp')
       var mapCanvas = document.getElementById('googlemap');
       var mapOptions = {
         center: {lat: -37.814107, lng: 144.96328},
-        zoom: 10,
+        zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
       gMap = new google.maps.Map(mapCanvas, mapOptions);
@@ -62,9 +62,9 @@ angular.module('fuelPricesApp')
       'United' : 'images/united-logo.ico',
       '7 Eleven' : 'images/711.ico',
       'Shell' : 'images/Shell_logo.ico',
-      // // 'Fuel Point' : 'images/',
+      'Fuel Point' : 'images/no-logo-petrol.ico',
       'Caltex' : 'images/caltex.ico',
-      // // 'Ampol' : 'images/',
+      'Ampol' : 'images/no-logo-petrol.ico',
       'Liberty' : 'images/logo-liberty.ico'
     };
 
