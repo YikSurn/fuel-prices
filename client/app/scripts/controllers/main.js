@@ -13,7 +13,7 @@ angular.module('fuelPricesApp')
     var mapCanvas = document.getElementById('googlemap');
     var mapOptions = {
       center: {lat: -37.814107, lng: 144.96328},
-      zoom: 8,
+      zoom: 16,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     var map = new google.maps.Map(mapCanvas, mapOptions);
