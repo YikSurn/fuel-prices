@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-# import django_filters
-import rest_framework_filters as filters
+import django_filters
+# import rest_framework_filters as filters
 
 # import rest framework libraries 
 from rest_framework.decorators import api_view
@@ -15,9 +15,17 @@ from rest_framework.decorators import detail_route
 from api.models import *
 from api.serializer import StationSerializer, FuelSerializer
 
+class StationFilter(django_filters.FilterSet):
+    """Declare filter field"""
+    fuel = django_filters.CharFilter(name="stationfuel__fuel__name")
+    class Meta:
+        model = Station
+        fields = ['fuel']
+
 class StationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
+    filter_class = StationFilter
 
 class FuelViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Fuel.objects.all()

@@ -1,6 +1,7 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,900,700italic,300,500);
 // endbower
 
 .browsehappy {
@@ -44,7 +45,7 @@ body {
         right: 0;
         color: #000000; } }
   .map .map__canvas {
-    height: 15rem;
+    height: 20rem;
     position: relative;
     width: 100%;
     background: #ffffff !important;
