@@ -116,7 +116,6 @@ angular.module('fuelPricesApp')
     // google.maps.event.addDomListener(window, 'load', initMap);
     // marker.setMap(map);
 
-
     function attachDetailsAndWindow(marker, station) {
       var fuelString = '';
 
@@ -136,8 +135,49 @@ angular.module('fuelPricesApp')
       });
     };
 
-    // Travel Distance Sliders
+    // Default Travel Distance Slider 
     $scope.distanceSlider = 5;
 
-
+    // Find cheapest fuel station within given distance
+    function findCheapestWithinDistance(pt, max_distance) {
+      var cheapest = {distance: null, price: null, longitude: null, latitude: null};
+      for (var i = 0; i < $scope.stations.length; i++) {
+        var temp_station = angular.copy($scope.stations[i]);
+        var station_pos = new google.maps.LatLng(temp_station['latitude'], temp_station['longitude']);
+        // Compute distance from pt to station
+        $scope.stations[i].distance = google.maps.geometry.spherical.computeDistanceBetween(pt,station_pos);
+        // if distance exceeds max_distance, skip to next station
+        if ($scope.stations[i].distance > max_distance) {
+          continue;
+        }
+        // Keep track of cheapest price 
+        if (i == 0) {
+          cheapest.distance = $scope.station[i].distance;
+          // cheapest['price'] = ;
+          cheapest.latitude = temp_station['latitude'];
+          cheapest.longitude = temp_station['longitude'];
+        } 
+        // else {
+        //   // if curr station price is cheaper, update cheapest
+        //   if ($scope.station[i][] < cheapest.price) {
+        //     cheapest.distance = $scope.station[i].distance;
+        //     cheapest['price'] = ;
+        //     cheapest.latitude = temp_station['latitude'];
+        //     cheapest.longitude  = temp_station['longitude'];
+        //   }
+        // }
+      }
+      console.log(cheapest);
+      // plot the cheapest station on map
+      cheapestMarker = new google.maps.Marker({
+        position: {lat: cheapest['latitude'], lng: cheapest['longitude']},
+        map: gMap,
+        icon: '',
+        animation: google.maps.Animation.BOUNCE,
+        title: 'Pump here!'
+      });
+      cheapestMarker.addListener('click', function() {
+        infowindow.open(cheapestMarker.get('map'), cheapestMarker);
+      });
+    };
   });
