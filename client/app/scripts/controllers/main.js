@@ -26,29 +26,8 @@ angular.module('fuelPricesApp')
 
     var initialLocation;
     var browserSupportFlag = new Boolean();
-    var infoWindow = new google.maps.InfoWindow({map: map})
+    var infoWindow = new google.maps.InfoWindow({map: gMap})
     // Try W3C Geolocation
-    if(navigator.geolocation) {
-      browserSupportFlag = true;
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        }
-        infoWindow.setPosition(pos);
-        infoWindow.setContent('Your location');
-        map.setCenter(pos);
-        // initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-        // map.setCenter(initialLocation);
-      }, function() {
-        handleNoGeolocation(browserSupportFlag);
-      });
-    }
-    // Browser doesn't support Geolocation
-    else {
-      browserSupportFlag = false;
-      handleNoGeolocation(browserSupportFlag);
-    }
 
     // No Geolocation handling
     function handleNoGeolocation(errorFlag) {
@@ -69,6 +48,28 @@ angular.module('fuelPricesApp')
 
         initMap();
 
+        if(navigator.geolocation) {
+          browserSupportFlag = true;
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('You are here!');
+            gMap.setCenter(pos);
+            // initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+            // map.setCenter(initialLocation);
+          }, function() {
+            handleNoGeolocation(browserSupportFlag);
+          });
+        }
+        // Browser doesn't support Geolocation
+        else {
+          browserSupportFlag = false;
+          handleNoGeolocation(browserSupportFlag);
+        }
+        
         for (var i = 0; i < $scope.stations.length; i++) {
           var temp_station = angular.copy($scope.stations[i]);
 
