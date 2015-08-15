@@ -1,7 +1,17 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import "font-awesome/scss/font-awesome.scss";
 // endbower
+
+// import bootswatch
+@import "_variables.scss";
+@import "_bootswatch.scss";
+
+$brand-logoblue: #03a9ff;
+$btn-logoblue-color: #fff;
+$btn-logoblue-bg: $brand-logoblue;
+$btn-logoblue-border: darken($btn-logoblue-bg, 5%);
 
 .browsehappy {
   margin: 0.2em 0;
@@ -11,8 +21,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 }
 
 body {
-  padding-right: 20px;
-  padding-left: 20px;
+  padding:0;
 }
 
 /* Google Map styling */
@@ -33,7 +42,7 @@ body {
     display: none; }
     @media only screen and (min-width: 30em) {
       .map .map__address {
-        height: 30rem;
+        height: 40rem;
         font-size: 3.2rem;
         padding: 1rem;
         width: 25%;
@@ -45,14 +54,14 @@ body {
         right: 0;
         color: #000000; } }
   .map .map__canvas {
-    height: 25rem;
+    height: 40rem;
     position: relative;
     width: 100%;
     background: #ffffff !important;
     margin: 1rem auto 0 auto; }
     @media only screen and (min-width: 30em) {
       .map .map__canvas {
-        height: 30rem; } }
+        height: 40rem; } }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
