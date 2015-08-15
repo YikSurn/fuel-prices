@@ -45,6 +45,19 @@ angular.module('fuelPricesApp')
       gMap.setCenter(initialPos);
     };
 
+    // images for the different brands of fuel stations
+    var images = {
+      'BP' : '',
+      'National Lube' : '',
+      'United' : '',
+      '7 Eleven' : '',
+      'Shell' : '',
+      'Fuel Point' : '',
+      'Caltex' : '',
+      'Ampol' : '',
+      'Liberty' : ''
+    };
+
     $http.get(API_MOUNT + 'station')
       .success(function(data) {
         $scope.stations = data;
@@ -53,8 +66,9 @@ angular.module('fuelPricesApp')
 
         initialMarker = new google.maps.Marker({
           map: gMap,
+          icon: 'favicon.ico',
           animation: google.maps.Animation.BOUNCE,
-          title: "YOU ARE HERE!"
+          title: 'You Are Here!'
         });
 
         if(navigator.geolocation) {
@@ -84,6 +98,7 @@ angular.module('fuelPricesApp')
           $scope.stations[i]['marker'] = new google.maps.Marker({
             position: {lat: temp_station['latitude'], lng: temp_station['longitude']},
             map: gMap,
+            icon: images[temp_station.brand],
             animation: google.maps.Animation.DROP,
             title: temp_station['name']
           });
@@ -94,6 +109,7 @@ angular.module('fuelPricesApp')
     // google.maps.event.addDomListener(window, 'load', initMap);
     // marker.setMap(map);
 
+
     function attachDetailsAndWindow(marker, station) {
       var fuelString = '';
 
@@ -103,7 +119,9 @@ angular.module('fuelPricesApp')
 
       var infowindow = new google.maps.InfoWindow({
         content: 'Station Name: ' + station.name + '<br>' +
-          'Address: ' + station.address + '<br>' + fuelString
+          'Brand: ' + station.brand + '<br>' +
+          'Address: ' + station.address + '<br>' + 
+          fuelString
       });
 
       marker.addListener('click', function() {
