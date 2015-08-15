@@ -9,15 +9,34 @@
  */
 angular.module('fuelPricesApp')
   .controller('MainCtrl', function ($scope) {
-    function initialize() {
-      var mapCanvas = document.getElementById('googlemap');
-      var mapOptions = {
-        center: new google.maps.LatLng(-37.814107, 144.96328),
-        zoom: 8,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-      var map = new google.maps.Map(mapCanvas, mapOptions);
-    }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+    var mapCanvas = document.getElementById('googlemap');
+    var mapOptions = {
+      center: {lat: -37.814107, lng: 144.96328},
+      zoom: 8,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+
+    var marker = new google.maps.Marker({
+      position: {lat: -38, lng: 145},
+      // map: map,
+      animation: google.maps.Animation.DROP,
+      title: 'Tooltip!',
+      // label: "a"
+    });
+
+    var infowindow = new google.maps.InfoWindow({
+      content: "HELLO NEXUSFUEL!"
+    });
+
+    // google.maps.event.addDomListener(window, 'load', initMap);
+    marker.setMap(map);
+
+    marker.addListener('click', showDetails);
+
+    function showDetails() {
+      infowindow.open(map, marker);
+    };
+
   });
