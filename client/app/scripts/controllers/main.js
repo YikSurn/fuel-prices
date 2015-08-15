@@ -56,15 +56,15 @@ angular.module('fuelPricesApp')
 
     // images for the different brands of fuel stations
     var images = {
-      // 'BP' : 'images/BP.ico',
-      // 'National Lube' : 'images/national_lube.ico',
-      // 'United' : 'images/united-logo.ico',
-      // '7 Eleven' : 'images/711.ico',
-      // 'Shell' : 'images/Shell_logo.ico',
+      'BP' : 'images/BP.ico',
+      'National Lube' : 'images/national_lube.ico',
+      'United' : 'images/united-logo.ico',
+      '7 Eleven' : 'images/711.ico',
+      'Shell' : 'images/Shell_logo.ico',
       // // 'Fuel Point' : 'images/',
-      // 'Caltex' : 'images/caltex.ico',
+      'Caltex' : 'images/caltex.ico',
       // // 'Ampol' : 'images/',
-      // 'Liberty' : 'images/logo-liberty.ico'
+      'Liberty' : 'images/logo-liberty.ico'
     };
 
     $http.get(API_MOUNT + 'station')
