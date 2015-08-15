@@ -2,14 +2,14 @@
 
 /**
  * @ngdoc overview
- * @name fuelApp
+ * @name fuelPricesApp
  * @description
- * # fuelApp
+ * # fuelPricesApp
  *
  * Main module of the application.
  */
 angular
-  .module('fuelApp', [
+  .module('fuelPricesApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
