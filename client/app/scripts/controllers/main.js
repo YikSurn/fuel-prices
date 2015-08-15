@@ -16,27 +16,25 @@ angular.module('fuelPricesApp')
     var mapCanvas = document.getElementById('googlemap');
     var mapOptions = {
       center: {lat: -37.814107, lng: 144.96328},
-      zoom: 16,
+      zoom: 10,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     var gMap = new google.maps.Map(mapCanvas, mapOptions);
 
     $http.get(API_MOUNT + 'station')
-      .success(function(data) { 
+      .success(function(data) {
         $scope.stations = data;
 
         for (var i = 0; i < $scope.stations.length; i++) {
-          temp_station = angular.copy($scope.stations[i]);
-          console.log(temp_station);
+          var temp_station = angular.copy($scope.stations[i]);
 
-          $scope.stations[i]['address'] = temp_station.street + ', ' + temp_station.suburbs + temp_station.postcode
+          $scope.stations[i]['address'] = temp_station.street + ', ' + temp_station.suburbs + ' ' + temp_station.postcode
 
           $scope.stations[i]['marker'] = new google.maps.Marker({
-            position: {lat: parseFloat(temp_station['latitude']), lng: parseFloat(temp_station['latitude'])},
+            position: {lat: temp_station['latitude'], lng: temp_station['latitude']},
             map: gMap,
             animation: google.maps.Animation.DROP,
             title: temp_station['name']
-            // label: "a"
           });
           attachDetailsAndWindow($scope.stations[i]['marker'], $scope.stations[i]);
         };
@@ -46,9 +44,15 @@ angular.module('fuelPricesApp')
     // marker.setMap(map);
 
     function attachDetailsAndWindow(marker, station) {
+      var fuelString = '';
+
+      for (var i = 0; i < station.fuels_offer.length; i++) {
+        fuelString += station.fuels_offer[i]['name'] + ': $' + station.fuels_offer[i]['price'].toFixed(2) + '<br>';
+      };
+
       var infowindow = new google.maps.InfoWindow({
-        content: 'Station Name: ' + station.name +
-          'Address: ' + station.address + station.
+        content: 'Station Name: ' + station.name + '<br>' +
+          'Address: ' + station.address + '<br>' + fuelString
       });
 
       marker.addListener('click', function() {
