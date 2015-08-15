@@ -102,7 +102,11 @@ angular.module('fuelPricesApp')
 
         initialMarker = new google.maps.Marker({
           map: gMap,
-          icon: 'favicon.ico',
+          // icon: new google.maps.MarkerImage('favicon.ico', new google.maps.Size(width, height)),
+          icon: {
+            url: 'favicon.ico',
+            scaledSize: new google.maps.Size(29, 29),
+          },
           animation: google.maps.Animation.BOUNCE,
           title: 'You Are Here!'
         });
