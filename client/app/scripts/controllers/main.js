@@ -29,7 +29,7 @@ angular.module('fuelPricesApp')
       var mapCanvas = document.getElementById('googlemap');
       var mapOptions = {
         center: {lat: -37.814107, lng: 144.96328},
-        zoom: 10,
+        zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
       gMap = new google.maps.Map(mapCanvas, mapOptions);
@@ -62,9 +62,9 @@ angular.module('fuelPricesApp')
       'United' : 'images/united-logo.ico',
       '7 Eleven' : 'images/711.ico',
       'Shell' : 'images/Shell_logo.ico',
-      // // 'Fuel Point' : 'images/',
+      'Fuel Point' : 'images/no-logo-petrol.ico',
       'Caltex' : 'images/caltex.ico',
-      // // 'Ampol' : 'images/',
+      'Ampol' : 'images/no-logo-petrol.ico',
       'Liberty' : 'images/logo-liberty.ico'
     };
 
@@ -157,24 +157,24 @@ angular.module('fuelPricesApp')
       // To close all currently open infowindows
       google.maps.event.trigger(gMap, 'click');
 
-      var fuel_type = angular.copy($scope.selected.fuel);
-      var min_stations = [$scope.stations[0]];
+      var fuelType = angular.copy($scope.selected.fuel);
+      var minStations = [$scope.stations[0]];
       for (var i = 1; i < $scope.stations.length; i++) {
         // Stop previously bouncing markers
         $scope.stations[i].marker.setAnimation(null);
 
-        if ($scope.stations[i].fuels_offer[fuel_type] < min_stations[0].fuels_offer[fuel_type]) {
-          min_stations = [$scope.stations[i]];
-        } else if ($scope.stations[i].fuels_offer[fuel_type] == min_stations[0].fuels_offer[fuel_type]) {
-          min_stations.push($scope.stations[i]);
+        if ($scope.stations[i].fuels_offer[fuelType] < minStations[0].fuels_offer[fuelType]) {
+          minStations = [$scope.stations[i]];
+        } else if ($scope.stations[i].fuels_offer[fuelType] == minStations[0].fuels_offer[fuelType]) {
+          minStations.push($scope.stations[i]);
         }
       };
 
-      if (min_stations.length == 1) {
-        google.maps.event.trigger(min_stations[0].marker, 'click');
+      if (minStations.length == 1) {
+        google.maps.event.trigger(minStations[0].marker, 'click');
       }
-      for (var i = 0; i < min_stations.length; i++) {
-        min_stations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+      for (var i = 0; i < minStations.length; i++) {
+        minStations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
       };
     };
 
@@ -209,33 +209,49 @@ angular.module('fuelPricesApp')
 
     // Find cheapest fuel station within given distance
     $scope.findCheapestWithinDistance = function(max_distance) {
-      console.log(max_distance);
-      var fuel_type = angular.copy($scope.selected.fuel);
-      var min_stations = [$scope.stations[0]];
-      // var cheapest = {distance: null, price: null, longitude: null, latitude: null};
-      for (var i = 1; i < $scope.stations.length; i++) {
+      var fuelType = angular.copy($scope.selected.fuel);
+      var minStations = undefined;
+      var firstInDist = false;
+
+      for (var i = 0; i < $scope.stations.length; i++) {
         var station_pos = new google.maps.LatLng($scope.stations[i].latitude, $scope.stations[i].longitude);
         // Compute distance from curr location to station
         $scope.stations[i].distance = google.maps.geometry.spherical.computeDistanceBetween($scope.currPos,station_pos);
         // if distance exceeds max_distance, skip to next station
-        if ($scope.stations[i].distance/1000 > max_distance) {
-          continue;
+        if (($scope.stations[i].distance)/1000 > max_distance) {
+          $scope.stations[i].marker.setMap(null);
         }
-        // Keep track of cheapest price
-        if ($scope.stations[i].fuels_offer[fuel_type] < min_stations[0].fuels_offer[fuel_type]) {
-          min_stations = [$scope.stations[i]];
-        } else if ($scope.stations[i].fuels_offer[fuel_type] == min_stations[0].fuels_offer[fuel_type]) {
-          min_stations.push($scope.stations[i]);
+        else {
+          $scope.stations[i].marker.setMap(gMap);
+
+          if (!firstInDist) {
+            // Take the first station within distance to compare fuel prices
+            minStations = [$scope.stations[i]];
+            firstInDist = true;
+          }
+          // Keep track of cheapest price
+          else if ($scope.stations[i].fuels_offer[fuelType] < minStations[0].fuels_offer[fuelType]) {
+            minStations = [$scope.stations[i]];
+          } 
+          else if ($scope.stations[i].fuels_offer[fuelType] == minStations[0].fuels_offer[fuelType]) {
+            minStations.push($scope.stations[i]);
+          }
         }
       };
-      console.log(min_stations);
+
       // show the cheapest station on map
-      if (min_stations.length == 1) {
-        google.maps.event.trigger(min_stations[0].marker, 'click');
-      };
-      for (var i = 0; i < min_stations.length; i++) {
-        min_stations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
-      };
+      if (minStations == undefined) {
+        // No stations in range
+        alert('No stations within specified distance!');
+      }
+      else {
+        if (minStations.length == 1) {
+          google.maps.event.trigger(minStations[0].marker, 'click');
+        };
+        for (var i = 0; i < minStations.length; i++) {
+          minStations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+        };
+      }
     };
 
   });
