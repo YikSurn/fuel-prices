@@ -18,5 +18,5 @@ class StationSerializer(serializers.HyperlinkedModelSerializer):
     fuels_offer = StationFuelSerializer(source='stationfuel_set', many=True)
     class Meta:
         model = Station
-        fields = ('name', 'address', 'suburbs', 'postcode', 'fuels_offer')
+        fields = ('name', 'address', 'suburbs', 'postcode', 'latitude', 'longitude', 'fuels_offer')
 
