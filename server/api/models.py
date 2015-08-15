@@ -5,8 +5,9 @@ class Station(models.Model):
     """Petrol station details"""
     name = models.CharField(max_length=50)
     street = models.CharField(max_length=100, unique=True)
-    suburbs = models.CharField(max_length=50)
+    suburb = models.CharField(max_length=50)
     postcode = models.CharField(max_length=4)
+    address = models.CharField(max_length=200, unique=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
 

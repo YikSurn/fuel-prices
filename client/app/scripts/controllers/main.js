@@ -11,42 +11,24 @@ angular.module('fuelPricesApp')
   .controller('MainCtrl', function ($scope, $http) {
 
     // Integrating Google Map API 
-    $scope.stations;
+    $scope.stations = undefined;
+    var gMap;
 
-    var infowindow;
-    var mapCanvas = document.getElementById('googlemap');
-    var mapOptions = {
-      center: {lat: -37.814107, lng: 144.96328},
-      zoom: 10,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-    var gMap = new google.maps.Map(mapCanvas, mapOptions);
+    function initMap() {
+      var infowindow;
+      var mapCanvas = document.getElementById('googlemap');
+      var mapOptions = {
+        center: {lat: -37.814107, lng: 144.96328},
+        zoom: 10,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      gMap = new google.maps.Map(mapCanvas, mapOptions);
+    };
 
     var initialLocation;
     var browserSupportFlag = new Boolean();
-    var infoWindow = new google.maps.InfoWindow({map: map})
+    var infoWindow = new google.maps.InfoWindow({map: gMap})
     // Try W3C Geolocation
-    if(navigator.geolocation) {
-      browserSupportFlag = true;
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        }
-        infoWindow.setPosition(pos);
-        infoWindow.setContent('Your location');
-        map.setCenter(pos);
-        // initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-        // map.setCenter(initialLocation);
-      }, function() {
-        handleNoGeolocation(browserSupportFlag);
-      });
-    }
-    // Browser doesn't support Geolocation
-    else {
-      browserSupportFlag = false;
-      handleNoGeolocation(browserSupportFlag);
-    }
 
     // No Geolocation handling
     function handleNoGeolocation(errorFlag) {
@@ -65,13 +47,35 @@ angular.module('fuelPricesApp')
       .success(function(data) {
         $scope.stations = data;
 
+        initMap();
+
+        if(navigator.geolocation) {
+          browserSupportFlag = true;
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('You are here!');
+            gMap.setCenter(pos);
+            // initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+            // map.setCenter(initialLocation);
+          }, function() {
+            handleNoGeolocation(browserSupportFlag);
+          });
+        }
+        // Browser doesn't support Geolocation
+        else {
+          browserSupportFlag = false;
+          handleNoGeolocation(browserSupportFlag);
+        }
+        
         for (var i = 0; i < $scope.stations.length; i++) {
           var temp_station = angular.copy($scope.stations[i]);
 
-          $scope.stations[i]['address'] = temp_station.street + ', ' + temp_station.suburbs + ' ' + temp_station.postcode
-
           $scope.stations[i]['marker'] = new google.maps.Marker({
-            position: {lat: temp_station['latitude'], lng: temp_station['latitude']},
+            position: {lat: temp_station['latitude'], lng: temp_station['longitude']},
             map: gMap,
             animation: google.maps.Animation.DROP,
             title: temp_station['name']
@@ -87,7 +91,7 @@ angular.module('fuelPricesApp')
       var fuelString = '';
 
       for (var i = 0; i < station.fuels_offer.length; i++) {
-        fuelString += station.fuels_offer[i]['name'] + ': $' + station.fuels_offer[i]['price'].toFixed(2) + '<br>';
+        fuelString += station.fuels_offer[i]['name'] + ': ' + station.fuels_offer[i]['price'] + 'c<br>';
       };
 
       var infowindow = new google.maps.InfoWindow({

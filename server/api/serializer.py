@@ -20,5 +20,4 @@ class StationSerializer(serializers.HyperlinkedModelSerializer):
     longitude = serializers.ReadOnlyField()
     class Meta:
         model = Station
-        fields = ('name', 'street', 'suburbs', 'postcode', 'latitude', 'longitude', 'fuels_offer')
-
+        fields = ('name', 'street', 'suburb', 'postcode', 'address', 'latitude', 'longitude', 'fuels_offer')
