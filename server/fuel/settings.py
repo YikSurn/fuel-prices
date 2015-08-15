@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'fuelpricesdb',
         'USER': 'nexusfuel',
         'PASSWORD': 'unihack2015',
-        'HOST': '',
+        'HOST': 'nexusfuel.c2fljdk9mdlp.ap-southeast-2.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
