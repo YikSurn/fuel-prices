@@ -13,14 +13,18 @@ angular.module('fuelPricesApp')
     $scope.selected = {
       fuel : undefined
     };
-    $scope.types = ['All Types', 'Diesel', 'Unleaded', 'Premium 95', 'Premium 98'];
+    $scope.types = ['Diesel', 'Unleaded', 'Premium Unleaded 95', 'Premium Unleaded 98'];
 
     // Integrating Google Map API 
     $scope.stations = undefined;
-    var gMap;
+    var gMap, infowindow;
+    var initialMarker, initialPos;
+    var browserSupportFlag = new Boolean();
+    var initialInfoWindow = new google.maps.InfoWindow({
+      content: 'You Are Here!'
+    });
 
     function initMap() {
-      var infowindow;
       var mapCanvas = document.getElementById('googlemap');
       var mapOptions = {
         center: {lat: -37.814107, lng: 144.96328},
@@ -28,14 +32,14 @@ angular.module('fuelPricesApp')
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
       gMap = new google.maps.Map(mapCanvas, mapOptions);
+      infowindow = new google.maps.InfoWindow();
+
+      google.maps.event.addListener(gMap, 'click', function() {
+        infowindow.close();
+        initialInfoWindow.close();
+      });
     };
 
-    var initialMarker, initialPos;
-    var browserSupportFlag = new Boolean();
-    var infoWindow = new google.maps.InfoWindow({gmap: gMap})
-    var initialInfoWindow = new google.maps.InfoWindow({
-      content: 'You Are Here!'
-    });
 
     // No Geolocation handling
     function handleNoGeolocation(errorFlag) {
@@ -67,8 +71,6 @@ angular.module('fuelPricesApp')
       .success(function(data) {
         $scope.stations = data;
 
-
-
         initMap();
 
         initialMarker = new google.maps.Marker({
@@ -85,8 +87,8 @@ angular.module('fuelPricesApp')
               lat: position.coords.latitude,
               lng: position.coords.longitude
             }
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('You are here!');
+            initialInfoWindow.setPosition(pos);
+            initialInfoWindow.setContent('You are here!');
             gMap.setCenter(pos);
 
             initialPos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -138,20 +140,43 @@ angular.module('fuelPricesApp')
         fuelString += type + ': ' + station.fuels_offer[type] + 'c<br>';
       };
 
-      var infowindow = new google.maps.InfoWindow({
-        content: 'Station Name: ' + station.name + '<br>' +
-          'Brand: ' + station.brand + '<br>' +
-          'Address: ' + station.address + '<br>' + 
-          fuelString
-      });
-
-      marker.addListener('click', function() {
-        infowindow.open(marker.get('map'), marker);
+      google.maps.event.addListener(marker, 'click', function(e) {
+        infowindow.setContent('Station Name: ' + station.name + '<br>' +
+            'Brand: ' + station.brand + '<br>' +
+            'Address: ' + station.address + '<br>' + 
+            fuelString);
+        infowindow.open(gMap, this);
       });
     };
 
     // Default Travel Distance Slider 
     $scope.distanceSlider = 5;
+
+    $scope.cheapestStations = function () {
+      // To close all currently open infowindows
+      google.maps.event.trigger(gMap, 'click');
+
+      var fuel_type = angular.copy($scope.selected.fuel);
+      var min_stations = [$scope.stations[0]];
+      for (var i = 1; i < $scope.stations.length; i++) {
+        // Stop previously bouncing markers
+        $scope.stations[i].marker.setAnimation(null);
+
+        if ($scope.stations[i].fuels_offer[fuel_type] < min_stations[0].fuels_offer[fuel_type]) {
+          min_stations = [$scope.stations[i]];
+        } else if ($scope.stations[i].fuels_offer[fuel_type] == min_stations[0].fuels_offer[fuel_type]) {
+          min_stations.push($scope.stations[i]);
+        }
+      };
+
+      console.log(min_stations);
+      if (min_stations.length == 1) {
+        google.maps.event.trigger(min_stations[0].marker, 'click');
+      }
+      for (var i = 0; i < min_stations.length; i++) {
+        min_stations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+      };
+    };
 
     // Find cheapest fuel station within given distance
     function findCheapestWithinDistance(pt, max_distance) {
@@ -196,11 +221,4 @@ angular.module('fuelPricesApp')
       });
     };
 
-    $scope.updateMarkers = function () {
-      var fuel_type = angular.copy($scope.selected.fuel);
-      var min_station = $scope.stations[0];
-      // for (var i = 1; i < $scope.stations.length; i++) {
-      //   // $scope.stations[i]
-      // };
-    };
   });
