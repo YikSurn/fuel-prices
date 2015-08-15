@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name fuelApp.controller:AboutCtrl
+ * @name fuelPricesApp.controller:AboutCtrl
  * @description
  * # AboutCtrl
- * Controller of the fuelApp
+ * Controller of the fuelPricesApp
  */
-angular.module('fuelApp')
+angular.module('fuelPricesApp')
   .controller('AboutCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',

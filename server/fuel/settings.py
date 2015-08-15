@@ -81,9 +81,9 @@ WSGI_APPLICATION = 'fuel.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
+        'NAME': 'fuelpricesdb',
+        'USER': 'nexusfuel',
+        'PASSWORD': 'unihack2015',
         'HOST': '',
         'PORT': '5432',
     }
