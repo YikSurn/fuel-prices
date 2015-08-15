@@ -214,11 +214,9 @@ angular.module('fuelPricesApp')
       var min_stations = [$scope.stations[0]];
       // var cheapest = {distance: null, price: null, longitude: null, latitude: null};
       for (var i = 1; i < $scope.stations.length; i++) {
-        // var tempStation = angular.copy($scope.stations[i]);
         var station_pos = new google.maps.LatLng($scope.stations[i].latitude, $scope.stations[i].longitude);
         // Compute distance from curr location to station
         $scope.stations[i].distance = google.maps.geometry.spherical.computeDistanceBetween($scope.currPos,station_pos);
-        console.log($scope.stations[i].distance)
         // if distance exceeds max_distance, skip to next station
         if ($scope.stations[i].distance/1000 > max_distance) {
           continue;
@@ -229,12 +227,12 @@ angular.module('fuelPricesApp')
         } else if ($scope.stations[i].fuels_offer[fuel_type] == min_stations[0].fuels_offer[fuel_type]) {
           min_stations.push($scope.stations[i]);
         }
-      }
+      };
       console.log(min_stations);
       // show the cheapest station on map
       if (min_stations.length == 1) {
         google.maps.event.trigger(min_stations[0].marker, 'click');
-      }
+      };
       for (var i = 0; i < min_stations.length; i++) {
         min_stations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
       };

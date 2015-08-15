@@ -29,7 +29,7 @@
                   rz-slider-always-show-bar="true"
                   rz-slider-tpl-url="rzSliderTpl.html"></rzslider>
 
-      <button ng-click="cheapestStations()">Update</button>
+      <button ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">Update</button>
     </div>
   </div>
 
@@ -53,7 +53,7 @@
     <button ng-click="calcSavings()">Show Me!</button>
     <br><br>
 
-    <button ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">Update</button>
+<!--     <button ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">Update</button> -->
 
     <h3 ng-show="calculatorInput.savings"><b>You could potentially save ${{calculatorInput.savings}} every year!</b></h3>
     <br><br>
