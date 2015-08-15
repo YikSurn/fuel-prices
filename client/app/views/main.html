@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container"> -->
   <h1 style="color:black;"><center><b>PUMP IT UP!</b></center></h1>
   <div class="row">
     <div class="col-md-8">
@@ -20,16 +20,22 @@
       <select ng-model="selected.fuel" ng-init="selected.fuel = types[0]">
         <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
       </select>
-
       <br>
       I'm willing to travel a maximum of {{ distanceSlider | json }} km
       <rzslider rz-slider-model="distanceSlider"
                   rz-slider-floor="0.5"
                   rz-slider-ceil="10"
                   rz-slider-always-show-bar="true"
-                  rz-slider-tpl-url="rzSliderTpl.html"></rzslider>
+                  rz-slider-tpl-url="rzSliderTpl.html">
+      </rzslider>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="My traveling destination">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Search!</button>
+          </span>
+      </div>
 
-      <button ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">Update</button>
+      <button class="btn btn-default" ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">Update</button>
     </div>
   </div>
 
@@ -60,4 +66,4 @@
 
   </div>
 
-</div>
+<!-- </div> -->
