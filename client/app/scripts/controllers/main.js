@@ -10,28 +10,31 @@
 angular.module('fuelPricesApp')
   .controller('MainCtrl', function ($scope, $http) {
 
-    $scope.stations;
+    $scope.stations = undefined;
+    var gMap;
 
-    var infowindow;
-    var mapCanvas = document.getElementById('googlemap');
-    var mapOptions = {
-      center: {lat: -37.814107, lng: 144.96328},
-      zoom: 10,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-    var gMap = new google.maps.Map(mapCanvas, mapOptions);
+    function initMap() {
+      var infowindow;
+      var mapCanvas = document.getElementById('googlemap');
+      var mapOptions = {
+        center: {lat: -37.814107, lng: 144.96328},
+        zoom: 10,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      gMap = new google.maps.Map(mapCanvas, mapOptions);
+    };
 
     $http.get(API_MOUNT + 'station')
       .success(function(data) {
         $scope.stations = data;
 
+        initMap();
+
         for (var i = 0; i < $scope.stations.length; i++) {
           var temp_station = angular.copy($scope.stations[i]);
 
-          $scope.stations[i]['address'] = temp_station.street + ', ' + temp_station.suburbs + ' ' + temp_station.postcode
-
           $scope.stations[i]['marker'] = new google.maps.Marker({
-            position: {lat: temp_station['latitude'], lng: temp_station['latitude']},
+            position: {lat: temp_station['latitude'], lng: temp_station['longitude']},
             map: gMap,
             animation: google.maps.Animation.DROP,
             title: temp_station['name']
@@ -47,7 +50,7 @@ angular.module('fuelPricesApp')
       var fuelString = '';
 
       for (var i = 0; i < station.fuels_offer.length; i++) {
-        fuelString += station.fuels_offer[i]['name'] + ': $' + station.fuels_offer[i]['price'].toFixed(2) + '<br>';
+        fuelString += station.fuels_offer[i]['name'] + ': ' + station.fuels_offer[i]['price'] + 'c<br>';
       };
 
       var infowindow = new google.maps.InfoWindow({
