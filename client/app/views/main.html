@@ -29,7 +29,7 @@
         <div ng-hide="stations" style="display: table; height: 400px; overflow: hidden;">
          <div style="display: table-cell; vertical-align: middle;">
            <div>
-             <p style="font-size:2.5rem;">Loading...</p>
+             <p style="font-size:2.5rem;">Loading Google Maps...</p>
              <i class="fa fa-3x fa-spinner fa-pulse"></i>
            </div>
          </div>
@@ -99,12 +99,12 @@
     <div class="col-md-4">
         <div class="thumbnail" style="height:100px;">
             <h4>How often do you pump petrol every month?</h4>
-            <input type="number" ng-model="calculatorInput.freq" min="0" style="width:80%">
+            <input type="number" ng-model="calculatorInput.freq" min="0" max="60" style="width:80%">
             <br><br>
         </div>
     </div>
 
-    <button type="button" class="btn btn-lg btn-warning" ng-click="open()">Show Me!</button>
+    <button type="button" class="btn btn-lg btn-warning" ng-click="open()" ng-disabled="!(calculatorInput.freq) || !(calculatorInput.type) || !(calculatorInput.size)">Show Me!</button>
     <br><br>
 
     <!-- <h3 ng-show="calculatorInput.savings" style="font-color:white;"><b>You could potentially save ${{calculatorInput.savings}} every year!</b></h3>

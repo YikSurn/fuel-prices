@@ -1,17 +1,23 @@
-<div class="modal-header">
-  <h3 class="modal-title" style="font-color:black;"><b>You could potentially save up to <br> ${{savings}} annually!</b></h3>
-</div>
-<div class="modal-body">
+<div ng-if="savings > 0">
+  <div class="modal-header">
+    <h3 class="modal-title" style="font-color:black;"><b>You could potentially save up to <br> ${{savings}} annually!</b></h3>
+  </div>
+  <div class="modal-body">
+      <center>
+        <div>
+          <h3>{{message}}</h3>
+          <img src="{{image}}" style="display:block; margin-left:auto; margin-right:auto;"/>
+        </div>
+      </center>
+      <br>
+  </div>
+  <div class="modal-footer">
     <center>
-      <div>
-        <h3>{{message}}</h3>
-        <img src="{{image}}" style="display:block; margin-left:auto; margin-right:auto;"/>
-      </div>
+    <button class="btn btn-lg btn-warning" type="button" ng-click="ok()" style="width: 50%;">Thanks!</button>
     </center>
-    <br>
+  </div>
 </div>
-<div class="modal-footer">
-  <center>
-  <button class="btn btn-lg btn-warning" type="button" ng-click="ok()" style="width: 50%;">Thanks!</button>
-  </center>
+
+<div ng-if="!(savings > 0)" class="modal-body">
+  <h3>Oops! There is an error with your input. Please enter valid inputs.</h3>
 </div>
