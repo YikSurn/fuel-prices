@@ -1,6 +1,6 @@
 # Fuel Agent
 
-## Authors: Yik Surn Chong & Angelin Lim
+## Authors: Yik Surn Chong & Angeline Lim
 
 ## Third-party materials:
 
