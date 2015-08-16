@@ -13,7 +13,7 @@ angular.module('fuelPricesApp')
     $scope.selected = {
       fuel : undefined
     };
-    $scope.types = ['Diesel', 'Unleaded', 'Premium Unleaded 95', 'Premium Unleaded 98'];
+    $scope.types = ['LPG', 'Diesel', 'Unleaded', 'Premium Unleaded 95', 'Premium Unleaded 98'];
 
     // Integrating Google Map API 
     $scope.stations = undefined;
@@ -156,6 +156,7 @@ angular.module('fuelPricesApp')
         // Calculate potential savings for each fuel type
         function fuelSavings() {
           var minMaxDict = {
+            'LPG' : undefined, 
             'Diesel' : undefined, 
             'Unleaded' : undefined,
             'Premium Unleaded 95' : undefined,
@@ -195,7 +196,12 @@ angular.module('fuelPricesApp')
       var fuelString = '';
 
       for (var type in station.fuels_offer) {
-        fuelString += type + ': ' + station.fuels_offer[type] + 'c<br>';
+        if (!(station.fuels_offer[type])) {
+          fuelString += type + ': -<br>';
+        }
+        else {
+          fuelString += type + ': ' + station.fuels_offer[type] + 'c<br>';
+        }
       }
 
       google.maps.event.addListener(marker, 'click', function(e) {
