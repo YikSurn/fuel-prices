@@ -18,7 +18,7 @@ class Station(models.Model):
 class Fuel(models.Model):
     """All types of fuels available for cars"""
     name = models.CharField(max_length=30)
-    price = models.DecimalField(max_digits=4, decimal_places=1)
+    price = models.DecimalField(max_digits=4, decimal_places=1, null=True)
 
     class Meta:
         db_table = 'fuel'
