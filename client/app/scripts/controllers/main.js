@@ -186,7 +186,7 @@ angular.module('fuelPricesApp')
 
             }
           }
-          console.log(minMaxDict['LPG']);
+
           for (var fueltypeDict in minMaxDict) {
             $scope.calculator.types.push({label: fueltypeDict, value: minMaxDict[fueltypeDict].max - minMaxDict[fueltypeDict].min });
           }
