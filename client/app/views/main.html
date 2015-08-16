@@ -73,38 +73,40 @@
 
 <!-- Cost savings calculator -->
 <div class="savingsCalculator" align="center">
-<h2 style="color:black;">How much can you save with us!?</h2>
+    <br>
+    <h2 style="color:white;">How much can you save with us !?</h2>
+    <br>
 
-<div class="col-md-4">
-<div class="thumbnail" style="height:100px;">
-    <h4>What is your car size?</h4>
-    <select ng-model="calculatorInput.size" ng-init="calculatorInput.size = calculator.sizes[1].value" ng-options="item.value as item.label for item in calculator.sizes" style="width:80%">
-    </select>
+    <div class="col-md-4">
+        <div class="thumbnail" style="height:100px;">
+            <h4>What is your car size?</h4>
+            <select ng-model="calculatorInput.size" ng-init="calculatorInput.size = calculator.sizes[1].value" ng-options="item.value as item.label for item in calculator.sizes" style="width:80%">
+            </select>
+            <br><br>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="thumbnail" style="height:100px;">
+            <h4>What is your fuel type?</h4>
+            <select ng-model="calculatorInput.type" ng-init="calculatorInput.type = calculator.types[0].value" ng-options="item.value as item.label for item in calculator.types" style="width:80%">
+            </select>
+            <br><br>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="thumbnail" style="height:100px;">
+            <h4>How often do you go to the petrol station every month?</h4>
+            <input type="number" ng-model="calculatorInput.freq" min="0" max="60" required="true" style="width:80%">
+            <br><br>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-lg btn-warning" ng-click="calcSavings()">Show Me!</button>
     <br><br>
-</div>
-</div>
 
-<div class="col-md-4">
-<div class="thumbnail" style="height:100px;">
-    <h4>What is your fuel type?</h4>
-    <select ng-model="calculatorInput.type" ng-init="calculatorInput.type = calculator.types[0].value" ng-options="item.value as item.label for item in calculator.types" style="width:80%">
-    </select>
+    <h3 ng-show="calculatorInput.savings" style="font-color:white;"><b>You could potentially save ${{calculatorInput.savings}} every year!</b></h3>
     <br><br>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="thumbnail" style="height:100px;">
-    <h4>How often do you go to the petrol station every month?</h4>
-    <input type="number" ng-model="calculatorInput.freq" min="0" max="60" required="true" style="width:80%">
-    <br><br>
-</div>
-</div>
-
-<button type="button" class="btn btn-lg btn-warning" ng-click="calcSavings()">Show Me!</button>
-<br><br>
-
-<h3 ng-show="calculatorInput.savings"><b>You could potentially save ${{calculatorInput.savings}} every year!</b></h3>
-<br><br>
 </div>
 
