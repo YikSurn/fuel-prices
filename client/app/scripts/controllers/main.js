@@ -13,7 +13,7 @@ angular.module('fuelPricesApp')
     $scope.selected = {
       fuel : undefined
     };
-    $scope.types = ['Diesel', 'Unleaded', 'Premium Unleaded 95', 'Premium Unleaded 98'];
+    $scope.types = ['LPG', 'Diesel', 'Unleaded', 'Premium Unleaded 95', 'Premium Unleaded 98'];
 
     // Integrating Google Map API 
     $scope.stations = undefined;
@@ -156,6 +156,7 @@ angular.module('fuelPricesApp')
         // Calculate potential savings for each fuel type
         function fuelSavings() {
           var minMaxDict = {
+            'LPG' : undefined, 
             'Diesel' : undefined, 
             'Unleaded' : undefined,
             'Premium Unleaded 95' : undefined,
@@ -165,7 +166,10 @@ angular.module('fuelPricesApp')
           for (var i = 0; i < $scope.stations.length; i++) {
             var temp = angular.copy($scope.stations[i].fuels_offer);
             for (var fueltype in temp) {
-              if (minMaxDict[fueltype] === undefined) {
+              if (temp[fueltype] === null) {
+                continue;
+              }
+              if (minMaxDict[fueltype] === undefined ) {
                 minMaxDict[fueltype] = {};
                 minMaxDict[fueltype].min = temp[fueltype];
                 minMaxDict[fueltype].max = temp[fueltype];
@@ -182,7 +186,7 @@ angular.module('fuelPricesApp')
 
             }
           }
-
+          console.log(minMaxDict['LPG']);
           for (var fueltypeDict in minMaxDict) {
             $scope.calculator.types.push({label: fueltypeDict, value: minMaxDict[fueltypeDict].max - minMaxDict[fueltypeDict].min });
           }
@@ -195,7 +199,12 @@ angular.module('fuelPricesApp')
       var fuelString = '';
 
       for (var type in station.fuels_offer) {
-        fuelString += type + ': ' + station.fuels_offer[type] + 'c<br>';
+        if (!(station.fuels_offer[type])) {
+          fuelString += type + ': -<br>';
+        }
+        else {
+          fuelString += type + ': ' + station.fuels_offer[type] + 'c<br>';
+        }
       }
 
       google.maps.event.addListener(marker, 'click', function(e) {
@@ -227,7 +236,7 @@ angular.module('fuelPricesApp')
         // Compute distance from curr location to station
         $scope.stations[i].distance = google.maps.geometry.spherical.computeDistanceBetween($scope.currPos,stationPos);
         // if distance exceeds maxDistance, skip to next station
-        if (($scope.stations[i].distance)/1000 > maxDistance) {
+        if (($scope.stations[i].distance)/1000 > maxDistance || $scope.stations[i].fuels_offer[fuelType] === null) {
           $scope.stations[i].marker.setMap(null);
         }
         else {
@@ -258,7 +267,6 @@ angular.module('fuelPricesApp')
           google.maps.event.trigger(minStations[0].marker, 'click');
         }
         for (var j = 0; j < minStations.length; j++) {
-          minStations[j].marker.setIcon()
           minStations[j].marker.setAnimation(google.maps.Animation.BOUNCE);
         }
       }
