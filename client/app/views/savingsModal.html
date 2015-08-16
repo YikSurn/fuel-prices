@@ -1,21 +1,14 @@
 <div class="modal-header">
-  <h3 class="modal-title" style="font-color:black;"><b>You could potentially save up to ${{savings}} annually!</b></h3>
+  <h3 class="modal-title" style="font-color:black;"><b>You could potentially save up to <br> ${{savings}} annually!</b></h3>
 </div>
 <div class="modal-body">
     <center>
-    <div ng-if="savings < 75">
-        <h3>That's equivalent to sponsoring 2 children's immunisation in a third-world country</h3>
-        <img src="images/immunisation.jpg" style="display:block; margin-left:auto; margin-right:auto;"/>
-    </div>
-    <div ng-if="savings >= 75 && savings <= 140">
-        <h3>That's equivalent to providing clean drinking water to 3 families in a third-world country</h3>
-        <img src="images/water.jpg" style="display:block; margin-left:auto; margin-right:auto;"/>
-    </div>
-    <div ng-if="savings > 140">
-        <h3>That's equivalent to training a teacher in a third-world country</h3>
-        <img src="images/teacher.jpg" style="display:block; margin-left:auto; margin-right:auto;"/>
-    </div>
+      <div>
+        <h3>{{message}}</h3>
+        <img src="{{image}}" style="display:block; margin-left:auto; margin-right:auto;"/>
+      </div>
     </center>
+    <br>
 </div>
 <div class="modal-footer">
   <center>
