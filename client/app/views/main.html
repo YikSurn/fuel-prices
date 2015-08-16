@@ -58,7 +58,7 @@
           </div>
       </div>
       <center>
-          <button type="button" class="btn btn-warning" ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">
+          <button type="button" class="btn btn-warning" ng-click="cheapestStations(distanceSlider)">
             Show me the cheapest station!
           </button>
       </center>
@@ -95,12 +95,8 @@
 </div>
 </div>
 
-<button type="button" class="btn btn-warning" ng-click="calcSavings()">Show Me!</button>
+<button type="button" class="btn btn-warning" ng-click="open()">Show Me!</button>
 <br><br>
 
-<!--     <button ng-click="cheapestStations(); findCheapestWithinDistance(distanceSlider)">Update</button> -->
-
-<h3 ng-show="calculatorInput.savings"><b>You could potentially save ${{calculatorInput.savings}} every year!</b></h3>
-<br><br>
 </div>
 
