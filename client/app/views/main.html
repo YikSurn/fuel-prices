@@ -38,11 +38,11 @@
     </div>
 
     <!-- Filter options -->
-    <div class="col-md-4" style="font-size:20px;">
+    <div class="col-md-4">
       <br><br>
       <div class="panel panel-default">
           <div class="panel-body">
-            <p>What is your fuel type?</p>
+            <h4>What is your fuel type?</h4>
           <div class="btn-group">
               <center>
               <select class="selectpicker" ng-model="selected.fuel" ng-init="selected.fuel = types[0]" style="width:80%;">
@@ -52,8 +52,8 @@
           </div>
           </div>
           <div class="panel-body">
-              I'm willing to travel a maximum of <b>{{ distanceSlider | json }}</b> km
-              <p style="font-size:12px;"><i>(move the slider below)</i></p>
+              <h4>I'm willing to travel a maximum of <b>{{ distanceSlider | json }}</b> km</h4>
+              <p style="font-size:12px;"><i>(adjust the slider below to your liking)</i></p>
               <div>
                 <rzslider rz-slider-model="distanceSlider"
                           rz-slider-floor="1"
