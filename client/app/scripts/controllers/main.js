@@ -286,4 +286,36 @@ angular.module('fuelPricesApp')
       }
     };
 
+    var destinationAddress = angular.copy($scope.address);
+
+    // Test direction func --------------------------------------
+    var directionService = new google.maps.DirectionsService(),
+        directionDisplay = new google.maps.DirectionsRenderer({});
+    $scope.getDirection = function() {
+      // set direction
+      var selectedMode = $scope.selectedOption.toUpperCase() || 'DRIVING',
+          from = $scope.currPos || initialPos,
+          request = {
+              origin: from,
+              destination: streetAddress,
+              travelMode: selectedMode,
+              provideRouteAlternatives: true,
+              unitSystem: google.maps.UnitSystem.METRIC,
+              optimizeWaypoints: true
+          };
+      if (selectedMode === 'TRANSIT') {
+          request.transitOptions = {
+              departureTime: new Date()
+          };
+      }
+
+      directionsService.route(request, function (response, status) {
+          if (status === google.maps.DirectionsStatus.OK) {
+              directionsDisplay.setDirections(response);
+          } else {
+              toastr.error(status);
+          }
+      });
+    };
+
   });
