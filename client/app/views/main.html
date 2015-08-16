@@ -5,8 +5,8 @@
   <div style="position: absolute; top: 12%; width: 100%; z-index: 2;">
     <div class="col-md-12">
         <center>
-        <h1 style="color:white; font-size:6rem;">Save $ Everytime You Come With Us!</h1><br>
-        <h4 style="color:white; font-size:3rem;">We provide the best data on fuel prices around you</h4>
+        <h1 style="color:white; font-size:6rem;"><b>Why Pay More?</b></h1><br>
+        <h4 style="color:white; font-size:3rem;"><b>We provide the best data on fuel prices around you</b></h4>
         </center>
     </div>
   </div>
@@ -25,29 +25,35 @@
       </div>
       
       
-      <center><div ng-hide="stations">
-        Searching for stations around you...
-        <i class="fa fa-refresh fa-spin"></i>
-      </div></center>
+      <center>
+        <div ng-hide="stations" style="display: table; height: 400px; overflow: hidden;">
+         <div style="display: table-cell; vertical-align: middle;">
+           <div>
+             <p style="font-size:2.5rem;">Loading...</p>
+             <i class="fa fa-3x fa-spinner fa-pulse"></i>
+           </div>
+         </div>
+        </div>
+      </center>
     </div>
 
     <!-- Filter options -->
-    <div class="col-md-4">
+    <div class="col-md-4" style="font-size:20px;">
       <br><br>
       <div class="panel panel-default">
           <div class="panel-body">
             <p>What is your fuel type?</p>
           <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <select class="selectpicker" ng-model="selected.fuel" ng-init="selected.fuel = types[0]">
+              <center>
+              <select class="selectpicker" ng-model="selected.fuel" ng-init="selected.fuel = types[0]" style="width:80%;">
                 <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
               </select>
-            </button>
+              </center>
           </div>
           </div>
           <div class="panel-body">
-              I'm willing to travel a maximum of {{ distanceSlider | json }} km
-              <br><br>
+              I'm willing to travel a maximum of <b>{{ distanceSlider | json }}</b> km
+              <p style="font-size:12px;"><i>(move the slider below)</i></p>
               <div>
                 <rzslider rz-slider-model="distanceSlider"
                           rz-slider-floor="1"
@@ -67,36 +73,40 @@
 
 <!-- Cost savings calculator -->
 <div class="savingsCalculator" align="center">
-<h2 style="color:black;">How much can you save with us!?</h2>
+    <br>
+    <h2 style="color:white;">How much can you save with us !?</h2>
+    <br>
 
-<div class="col-md-4">
-<div class="thumbnail" style="height:100px;">
-    <h4>What is your car size?</h4>
-    <select ng-model="calculatorInput.size" ng-init="calculatorInput.size = calculator.sizes[1].value" ng-options="item.value as item.label for item in calculator.sizes" style="width:80%">
-    </select>
+    <div class="col-md-4">
+        <div class="thumbnail" style="height:100px;">
+            <h4>What is your car size?</h4>
+            <select ng-model="calculatorInput.size" ng-init="calculatorInput.size = calculator.sizes[1].value" ng-options="item.value as item.label for item in calculator.sizes" style="width:80%">
+            </select>
+            <br><br>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="thumbnail" style="height:100px;">
+            <h4>What is your fuel type?</h4>
+            <select ng-model="calculatorInput.type" ng-init="calculatorInput.type = calculator.types[0].value" ng-options="item.value as item.label for item in calculator.types" style="width:80%">
+            </select>
+            <br><br>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="thumbnail" style="height:100px;">
+            <h4>How often do you go to the petrol station every month?</h4>
+            <input type="number" ng-model="calculatorInput.freq" min="0" max="60" required="true" style="width:80%">
+            <br><br>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-lg btn-warning" ng-click="open()">Show Me!</button>
     <br><br>
-</div>
-</div>
 
-<div class="col-md-4">
-<div class="thumbnail" style="height:100px;">
-    <h4>What is your fuel type?</h4>
-    <select ng-model="calculatorInput.type" ng-init="calculatorInput.type = calculator.types[0].value" ng-options="item.value as item.label for item in calculator.types" style="width:80%">
-    </select>
-    <br><br>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="thumbnail" style="height:100px;">
-    <h4>How often do you go to the petrol station every month?</h4>
-    <input type="number" ng-model="calculatorInput.freq" min="0" max="60" required="true" style="width:80%">
-    <br><br>
-</div>
-</div>
-
-<button type="button" class="btn btn-warning" ng-click="open()">Show Me!</button>
-<br><br>
-
+    <!-- <h3 ng-show="calculatorInput.savings" style="font-color:white;"><b>You could potentially save ${{calculatorInput.savings}} every year!</b></h3>
+    <br><br> -->
 </div>
 
